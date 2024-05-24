@@ -52,6 +52,18 @@ func getRouteFromOSRM(src, dst string) (*OsrmResponse, error) {
 	return &osrmResponse, nil
 }
 
+// SortRoutes sorts the routes in a RouteResponse by duration and distance.
+// Routes are sorted first by duration in ascending order. If two routes have
+// the same duration, they are then sorted by distance in ascending order.
+func SortRoutes(routeResponse *RouteResponse) {
+	sort.Slice(routeResponse.Routes, func(i, j int) bool {
+		if routeResponse.Routes[i].Duration == routeResponse.Routes[j].Duration {
+			return routeResponse.Routes[i].Distance < routeResponse.Routes[j].Distance
+		}
+		return routeResponse.Routes[i].Duration < routeResponse.Routes[j].Duration
+	})
+}
+
 // GetDurationAndDistances retrieves the duration and distance for each destination from the source.
 func GetDurationAndDistances(src string, dst []string) (*RouteResponse, error) {
 	var wg sync.WaitGroup
@@ -96,12 +108,7 @@ func GetDurationAndDistances(src string, dst []string) (*RouteResponse, error) {
 	}
 
 	// sort the routes
-	sort.Slice(routeResponse.Routes, func(i, j int) bool {
-		if routeResponse.Routes[i].Duration == routeResponse.Routes[j].Duration {
-			return routeResponse.Routes[i].Distance < routeResponse.Routes[j].Distance
-		}
-		return routeResponse.Routes[i].Duration < routeResponse.Routes[j].Duration
-	})
+	SortRoutes(routeResponse)
 
 	return routeResponse, nil
 }
