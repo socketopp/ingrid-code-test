@@ -100,6 +100,15 @@ curl 'http://localhost:8080/routes?src=13.388860,52.517037&dst=13.397634,52.5294
 {"source":"13.388860,52.517037","routes":[{"destination":"13.397634,52.529407","distance":1886.8,"duration":260.3},{"destination":"13.428555,52.523219","distance":3804.2,"duration":389.3}]}
 ```
 
+### Unit tests
+
+You can run the unit tests with `ok test` command.
+
+```bash
+$ go test ./tests
+ok      home/tests      0.155s
+```
+
 ### API Documentation
 **Endpoint: /routes**
 
